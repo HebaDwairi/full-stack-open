@@ -1,10 +1,7 @@
 const Header = ({ course }) => <h1>{course}</h1>
 
 const Total = ({ parts }) => {
-  let sum = 0;
-  parts.forEach(elem => {
-    sum += elem.exercises;
-  });
+  const sum = parts.reduce((prev, cur) => prev + cur.exercises, 0);
   return(<p>Number of exercises {sum}</p>);
 }
 
