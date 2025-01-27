@@ -1,5 +1,34 @@
 import { useState } from 'react'
 
+const Filter = ({setFilterWord, filterWord}) =>{
+  return(
+    <div>
+      filter by name: <input type="text" onChange={(event) => setFilterWord(event.target.value) } value={filterWord}/>
+    </div>
+  );
+}
+
+const PersonForm = ({newName, newNumber, setNewName, setNewNumber, addPerson}) => {
+  return(
+    <form onSubmit={addPerson}>
+        <div>name: <input value={newName} onChange={event => setNewName(event.target.value)} /></div>
+        <div>number: <input value={newNumber} onChange={event => setNewNumber(event.target.value)} /></div>
+        <div><button type="submit">add</button></div>
+    </form>
+  );
+}
+
+const Persons = ({persons, filterWord}) => {
+  return(
+    <ul>
+      {
+      persons.filter((person) => person.name.toLowerCase().includes(filterWord.toLowerCase())).
+      map((person) => <li key={person.name}>{person.name} {person.number}</li>)
+      }
+    </ul>
+  );
+}
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
@@ -31,20 +60,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>filter by name: <input type="text" onChange={(event) => setFilterWord(event.target.value)} /></div>
+      <Filter setFilterWord={setFilterWord} filterWord={filterWord} />
       <h2>add a new person</h2>
-      <form onSubmit={addPerson}>
-        <div>name: <input value={newName} onChange={event => setNewName(event.target.value)} /></div>
-        <div>number: <input value={newNumber} onChange={event => setNewNumber(event.target.value)} /></div>
-        <div><button type="submit">add</button></div>
-      </form>
+      <PersonForm newName={newName} newNumber={newNumber} setNewName={setNewName} setNewNumber={setNewNumber} addPerson={addPerson}/>
       <h2>Numbers</h2>
-      <ul>
-        {
-        persons.filter((person) => person.name.toLowerCase().includes(filterWord.toLowerCase())).
-        map((person) => <li key={person.name}>{person.name} {person.number}</li>)
-        }
-      </ul>
+      <Persons persons={persons} filterWord={filterWord}/>
     </div>
   )
 }
