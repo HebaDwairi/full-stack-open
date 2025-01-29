@@ -20,12 +20,33 @@ const PersonForm = ({newName, newNumber, setNewName, setNewNumber, addPerson}) =
   );
 }
 
-const Persons = ({persons, filterWord}) => {
+const Person = ({person, handleDeletion}) => {
+  return (
+      <li>
+        {person.name} {person.number}
+        <button onClick={handleDeletion}>delete</button>
+      </li>
+  );
+}
+
+const Persons = ({persons, filterWord, setPersons}) => {
+  const handleDeletion = (id, name) => {
+    if(confirm(`do you want to delete ${name}?`)){
+      personsService
+        .deletePerson(id)
+        .then(() => { 
+          console.log(name + ' was deleted');
+          setPersons(prevPersons => prevPersons.filter(person => person.id !== id));
+        });
+    }
+  }
   return(
     <ul>
       {
       persons.filter((person) => person.name.toLowerCase().includes(filterWord.toLowerCase())).
-      map((person) => <li key={person.name}>{person.name} {person.number}</li>)
+      map((person) => 
+        <Person key={person.id} person={person} handleDeletion={() => handleDeletion(person.id, person.name)}/>
+      )
       }
     </ul>
   );
@@ -73,7 +94,7 @@ const App = () => {
       <h2>add a new person</h2>
       <PersonForm newName={newName} newNumber={newNumber} setNewName={setNewName} setNewNumber={setNewNumber} addPerson={addPerson}/>
       <h2>Numbers</h2>
-      <Persons persons={persons} filterWord={filterWord}/>
+      <Persons persons={persons} filterWord={filterWord} setPersons={setPersons}/>
     </div>
   )
 }
