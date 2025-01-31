@@ -1,0 +1,87 @@
+.container{
+    padding: 1rem;
+    border-radius: 10px;
+    max-width: 500px;
+    min-width: fit-content;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+body{
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+ul{
+    list-style-type: none;
+}
+
+li{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+    gap: 1rem;
+}
+#name, #number {
+    flex: 1; 
+    text-align: left;
+}
+input{
+    padding: 5px;
+    margin: 10px 0;
+    width: 90%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex: 1;
+  }
+
+.main{
+    display: flex;
+    justify-content: space-around;
+    gap: 2rem;
+    max-width: 800px;
+    margin:0 auto;
+}
+
+.left{
+    flex:1;
+}
+
+.right{
+    flex : 2;
+}
+
+button{
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgb(92, 194, 160);
+    color:white;
+}
+button:hover{
+    background-color: rgb(80, 167, 138);
+}
+.deleteBtn{
+    background-color: rgb(199, 75, 53);
+    color: white;
+}
+.deleteBtn:hover{
+    background-color: rgb(155, 49, 30);
+}
+.formInp{
+    text-align: left;
+}
+
+.msg, .errorMsg{
+    background-color:  rgb(198, 227, 217); 
+    color: rgb(41, 72, 63);
+    border-radius: 5px;
+    margin: 10px;
+    border: 2px solid rgb(92, 194, 160);
+    padding: 5px;
+}
+.errorMsg{
+    background-color: rgb(219, 206, 206);
+    border: 2px solid rgb(179, 81, 81);
+    color: rgb(65, 32, 32);
+}

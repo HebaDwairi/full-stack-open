@@ -1,21 +1,32 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import personsService from './services/persons';
+import './style.css';
 
 const Filter = ({setFilterWord, filterWord}) =>{
   return(
-    <div>
+    <div className='container'>
       filter by name: <input type="text" onChange={(event) => setFilterWord(event.target.value) } value={filterWord}/>
+    </div>
+  );
+}
+
+const Message = ({message}) => {
+  if(message.content === null) return null;
+
+  return(
+    <div className={message.error ? 'errorMsg' : 'msg'}>
+      {message.content}
     </div>
   );
 }
 
 const PersonForm = ({newName, newNumber, setNewName, setNewNumber, addPerson}) => {
   return(
-    <form onSubmit={addPerson}>
-        <div>name: <input value={newName} onChange={event => setNewName(event.target.value)} /></div>
-        <div>number: <input value={newNumber} onChange={event => setNewNumber(event.target.value)} /></div>
-        <div><button type="submit">add</button></div>
+    <form onSubmit={addPerson} className='container'>
+        <div className='formInp'>name: <input value={newName} onChange={event => setNewName(event.target.value)} /></div>
+        <div className='formInp'>number: <input value={newNumber} onChange={event => setNewNumber(event.target.value)} /></div>
+        <div><button type="submit" style={{width:'100%'}}>add</button></div>
     </form>
   );
 }
@@ -23,25 +34,31 @@ const PersonForm = ({newName, newNumber, setNewName, setNewNumber, addPerson}) =
 const Person = ({person, handleDeletion}) => {
   return (
       <li>
-        {person.name} {person.number}
-        <button onClick={handleDeletion}>delete</button>
+        <b id='name'>{person.name}</b>  <span id='number'>{person.number}</span>
+        <button onClick={handleDeletion} className='deleteBtn'>delete</button>
       </li>
   );
 }
 
-const Persons = ({persons, filterWord, setPersons}) => {
+const Persons = ({persons, filterWord, setPersons, setMessage}) => {
   const handleDeletion = (id, name) => {
     if(confirm(`do you want to delete ${name}?`)){
       personsService
         .deletePerson(id)
         .then(() => { 
-          console.log(name + ' was deleted');
           setPersons(prevPersons => prevPersons.filter(person => person.id !== id));
+          setMessage({
+            error: false,
+            content: `deleted ${name}`
+          });
+          setTimeout(() => {
+            setMessage({error: false, content: null});
+          }, 5000);
         });
     }
   }
   return(
-    <ul>
+    <ul className='container'>
       {
       persons.filter((person) => person.name.toLowerCase().includes(filterWord.toLowerCase())).
       map((person) => 
@@ -57,6 +74,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterWord, setFilterWord] = useState('');
+  const [message, setMessage] = useState({error: false, content: null});
 
   useEffect(() => {
     personsService
@@ -83,6 +101,23 @@ const App = () => {
           .then((updatedPerson) => {
             console.log(newName + ' updated successfully');
             setPersons(persons.map(person => person.id === existingPerson.id ? updatedPerson : person));
+            setMessage({
+              error: false,
+              content: `updated ${newName}'s number`
+            });
+            setTimeout(() => {
+              setMessage({error: false, content: null});
+            }, 5000);
+          })
+          .catch(err => {
+            console.log(err);
+            setMessage({
+              error: true,
+              content: `${newName}'s data has already been removed from the server`
+            });
+            setTimeout(() => {
+              setMessage({error: false, content: null});
+            }, 5000);
           });
       }
     }
@@ -91,19 +126,31 @@ const App = () => {
         .create(newPerson)
         .then(returnedObj => {
           setPersons(persons.concat(returnedObj));
+          setMessage({
+            error: false,
+            content: `${newName} was added successfully.`
+          });
+          setTimeout(() => {
+            setMessage({error: false, content: null});
+          }, 5000);
         });
     }
     setNewName('');
     setNewNumber('');
   }
   return (
-    <div>
-      <h2>Phonebook</h2>
-      <Filter setFilterWord={setFilterWord} filterWord={filterWord} />
-      <h2>add a new person</h2>
-      <PersonForm newName={newName} newNumber={newNumber} setNewName={setNewName} setNewNumber={setNewNumber} addPerson={addPerson}/>
-      <h2>Numbers</h2>
-      <Persons persons={persons} filterWord={filterWord} setPersons={setPersons}/>
+    <div className='main'>
+      <div className='left'>
+        <h2>Phonebook</h2>
+        <Filter setFilterWord={setFilterWord} filterWord={filterWord} />
+        <h2>Add a new person</h2>
+        <Message message={message}/>
+        <PersonForm newName={newName} newNumber={newNumber} setNewName={setNewName} setNewNumber={setNewNumber} addPerson={addPerson}/>
+      </div>
+      <div className='right'>
+        <h2>Numbers</h2>
+        <Persons persons={persons} filterWord={filterWord} setPersons={setPersons} setMessage={setMessage}/>
+      </div>
     </div>
   )
 }
