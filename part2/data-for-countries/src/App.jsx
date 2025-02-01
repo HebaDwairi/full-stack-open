@@ -60,6 +60,11 @@ const App = () => {
     setMatches(filteredList);
   }
 
+  const showCountry = (name) => {
+    setMatches([name]);
+    setQuery('');
+  }
+
   return(
     <>
       <h2>Find countries</h2>
@@ -67,9 +72,11 @@ const App = () => {
 
       {matches.length === 1 ? <Country name={matches[0]}/> : 
         matches.length > 10 ? <p>Too many matches, specify another filter</p>:
-        <ul>
+        <ul className='countries'>
           {matches.map((country) => (
-            <li key={country}>{country}</li>
+            <li key={country} className='countryName'>{country} 
+            <button onClick={() => showCountry(country)}>show</button>
+            </li>
           ))}
         </ul>
       }
