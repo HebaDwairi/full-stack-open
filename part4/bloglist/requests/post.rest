@@ -2,8 +2,8 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title": "a book",
-  "author": "someone",
+  "title": "khkhkhk",
+  "author": ".",
   "url": "https://fullstackopen.com/en/part4/structure_of_backend_application_introduction_to_testing",
-  "likes": 20
+  "likes": 0
 }
