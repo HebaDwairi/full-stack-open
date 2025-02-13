@@ -1,5 +1,5 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import personsService from './services/persons';
 import './style.css';
 
@@ -80,7 +80,6 @@ const App = () => {
     personsService
       .getAll()
       .then(initial => {
-        console.log(initial);
         setPersons(initial);
       })
   }, []);
@@ -133,7 +132,16 @@ const App = () => {
           setTimeout(() => {
             setMessage({error: false, content: null});
           }, 5000);
-        });
+        })
+        .catch(err => {
+          setMessage({
+            error: true,
+            content: err.response.data.error
+          });
+          setTimeout(() => {
+            setMessage({error: false, content: null});
+          }, 5000);
+        })
     }
     setNewName('');
     setNewNumber('');
