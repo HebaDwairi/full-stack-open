@@ -34,6 +34,29 @@ test('identifier properity for blogs is id not _id', async () => {
     assert.strictEqual(blog._id, undefined);
 });
 
+test('when a post request is made the blog is saved to the db', async () => {
+    const dbAtStart = await blogsInDb();
+
+    const newBlog = {
+        title: 'test blog',
+        author: 'authorname',
+        url: 'url',
+        likes: 1
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+    
+    const dbAtEnd = await blogsInDb();
+    const contents = dbAtEnd.map(blog => blog.title);
+
+    assert(dbAtStart.length + 1 === dbAtEnd.length);
+    assert(dbAtEnd.find(o => o.title === 'test blog' && o.author === 'authorname' && o.url === 'url' && o.likes === 1));
+});
+
 after(async () => {
     await mongoose.connection.close();
 })
