@@ -26,6 +26,14 @@ test('correct number of blogs is returned in json', async () => {
     assert(res.body.length === initialBlogs.length);
 });
 
+test('identifier properity for blogs is id not _id', async () => {
+    const res = await api.get('/api/blogs');
+    const blog = res.body[0];
+    
+    assert.ok(blog.id);
+    assert.strictEqual(blog._id, undefined);
+});
+
 after(async () => {
     await mongoose.connection.close();
 })
