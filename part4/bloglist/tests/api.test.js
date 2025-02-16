@@ -67,6 +67,33 @@ test('when likes property is missing it defaults to zero', async () => {
     assert(res.body.likes === 0);
 });
 
+test('when title is missing backend responds with 400', async () => {
+    const newBlog = {
+        author: 'authorname',
+        url: 'url',
+        likes: 1
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400);
+});
+
+
+test('when author is missing backend responds with 400', async () => {
+    const newBlog = {
+        title: 'blog title',
+        url: 'url',
+        likes: 1
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400);
+});
+
 after(async () => {
     await mongoose.connection.close();
 });
