@@ -94,6 +94,37 @@ test('when author is missing backend responds with 400', async () => {
         .expect(400);
 });
 
+test('a blog post can be deleted',  async () => {
+    const dbAtStart = await blogsInDb();
+    const blog = dbAtStart[0];
+
+    await api
+        .delete(`/api/blogs/${blog.id}`)
+        .expect(204);
+
+    const dbAtEnd = await blogsInDb();
+    
+    assert(dbAtStart.length === dbAtEnd.length + 1);
+    assert(!dbAtEnd.find(o => o.title === blog.title && o.author === blog.author && o.url === blog.url && o.likes === blog.likes));
+});
+
+test('a blog post number of likes can be updated correctly',  async () => {
+    const dbAtStart = await blogsInDb();
+    let blog = dbAtStart[0];
+    blog.likes = 12;
+
+    const res = await api
+        .put(`/api/blogs/${blog.id}`)
+        .send(blog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
+
+    const dbAtEnd = await blogsInDb();
+    
+    assert(dbAtStart.length === dbAtEnd.length);
+    assert(blog.likes === res.body.likes);
+});
+
 after(async () => {
     await mongoose.connection.close();
 });
