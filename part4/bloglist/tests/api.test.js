@@ -51,12 +51,22 @@ test('when a post request is made the blog is saved to the db', async () => {
         .expect('Content-Type', /application\/json/)
     
     const dbAtEnd = await blogsInDb();
-    const contents = dbAtEnd.map(blog => blog.title);
 
     assert(dbAtStart.length + 1 === dbAtEnd.length);
     assert(dbAtEnd.find(o => o.title === 'test blog' && o.author === 'authorname' && o.url === 'url' && o.likes === 1));
 });
 
+test('when likes property is missing it defaults to zero', async () => {
+    const newBlog = {
+        title: 'test blog',
+        author: 'authorname',
+        url: 'url',
+    }
+
+    const res = await api.post('/api/blogs').send(newBlog);
+    assert(res.body.likes === 0);
+});
+
 after(async () => {
     await mongoose.connection.close();
-})
+});
