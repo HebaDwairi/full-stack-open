@@ -5,6 +5,5 @@ Content-Type: application/json
   "title": "blog",
   "author": ".",
   "url": "https://fullstackopen.com/en/part4/structure_of_backend_application_introduction_to_testing",
-  "likes": 0,
-  "user": "67b611170dbec8680b6331b6"
+  "likes": 0
 }
