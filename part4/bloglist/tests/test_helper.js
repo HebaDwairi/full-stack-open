@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Blog = require('../models/blog');
+const User = require('../models/user');
 
 const initialBlogs = [
     {
@@ -52,12 +53,36 @@ const initialBlogs = [
     }  
   ];
 
+const initialUsers = [
+  {
+    _id: "5a422bc61b54a676234d17fc", 
+    name: "abc",
+    username: "abc",
+    passwordHash: "$2y$10$sjbDkRcUb0FCC/FgYovOve0DZVaOCYWB4A2F4iV4nvePMWLP2ZeF.",
+    __v: 0
+  },
+  {
+    _id: "5a422ba71b54a676234d17fb",
+    name: "def",
+    username: "def",
+    passwordHash: "$2a$10$II3PMmb.AtnfFXbgJyFLseNBGSMO/YYgUAQsFCCXDHdf5mOHd1Oa2",
+    __v: 0
+  }
+];
+
 const blogsInDb = async () => {
     const blogs = await Blog.find({});
     return blogs.map(blog => blog.toJSON());
 }
 
+const usersInDb = async () => {
+  const users = await User.find({});
+  return users.map(user => user.toJSON());
+}
+
 module.exports = {
     initialBlogs,
     blogsInDb,
+    initialUsers,
+    usersInDb,
 }
