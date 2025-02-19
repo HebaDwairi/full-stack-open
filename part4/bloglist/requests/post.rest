@@ -3,8 +3,8 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlYmEiLCJpZCI6IjY3YjY1NWY0ZjZiZDViNzk2OWQ0ZGFjOSIsImlhdCI6MTc0MDAwNDAxMiwiZXhwIjoxNzQwMDA3NjEyfQ.anee6c0BP76zxI6xCsNpdIkciWxHCKxbq9Gf2sHzNKg
 
 {
-  "title": "new blog",
+  "title": "i like potatoes",
   "author": "name",
   "url": "url",
-  "likes": 2
+  "likes": 5
 }
