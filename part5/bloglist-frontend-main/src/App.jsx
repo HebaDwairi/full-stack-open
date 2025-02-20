@@ -32,6 +32,9 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     );
+    if(localStorage.getItem('loggedInUser')) {
+      setUser(JSON.parse(localStorage.getItem('loggedInUser')));
+    }
   }, []);
 
   const handleLogin = (e) => {
@@ -42,11 +45,16 @@ const App = () => {
         setUser(res);
         setPassword('');
         setUsername('');
-      
+        localStorage.setItem('loggedInUser', JSON.stringify(res));
       })
       .catch(err => {
         console.log(err);
       });
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('loggedInUser');
+    setUser(null);
   }
 
 
@@ -58,8 +66,9 @@ const App = () => {
 
   return (
     <div>
-      <h2>{user.name} logged in</h2>
       <h2>blogs</h2>
+      <h4>{user.name} logged in</h4>
+      <button onClick={handleLogout}>logout</button>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
