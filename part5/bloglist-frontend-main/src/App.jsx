@@ -50,6 +50,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState(null);
   const [blog, setBlog] = useState({
     title: '',
     author: '',
@@ -78,8 +79,11 @@ const App = () => {
         localStorage.setItem('loggedInUser', JSON.stringify(res));
         blogService.setToken(res.token);
       })
-      .catch(err => {
-        console.log(err);
+      .catch((err) => {
+        setMessage(`login failed: ${err.response.data.error}`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
       });
   }
 
@@ -99,18 +103,42 @@ const App = () => {
           author: '',
           url: ''
         });
+        setMessage(`a new blog ${res.title} by ${res.author} added`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
       })
+      .catch((err) => {
+        setMessage(`adding blog failed: ${err.response.data.error}`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      });
   }
 
   if(user === null) {
-    return (<LoginForm handleLogin={handleLogin} 
-      username={username} setUsername={setUsername}
-      password={password} setPassword={setPassword}/>);
+    return (
+      <div>
+        {message &&
+          <div style={{border:'1px solid black'}}>
+            {message}
+          </div>
+        }
+        <LoginForm handleLogin={handleLogin}
+          username={username} setUsername={setUsername}
+          password={password} setPassword={setPassword}/>
+      </div>
+      );
   }
 
   return (
     <div>
       <h2>blogs</h2>
+      {message && 
+        <div style={{border:'1px solid black'}}>
+          {message}
+        </div>
+      }
       <h4>{user.name} logged in</h4>
       <button onClick={handleLogout}>logout</button>
       <NewBlogForm handleNewBlog={handleNewBlog} blog={blog} setBlog={setBlog}/>
