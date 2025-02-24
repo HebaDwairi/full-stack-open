@@ -57,7 +57,8 @@ const NewBlogForm = ({handleNewBlog}) => {
     url: ''
   });
 
-  const addBlog = () => {
+  const addBlog = (e) => {
+    e.preventDefault();
     handleNewBlog(blog);
     setBlog({
       title: '',
@@ -130,17 +131,12 @@ const App = () => {
     setUser(null);
   }
 
-  const handleNewBlog = () => {
+  const handleNewBlog = (blog) => {
     blogService
       .create(blog)
       .then(res => {
-        setBlogs(blogs.concat(res));
+        setBlogs(blogs.concat({...res, user}));
         blogFormRef.current.toggleVisibility();
-        setBlog({
-          title: '',
-          author: '',
-          url: ''
-        });
         setMessage(`a new blog ${res.title} by ${res.author} added`);
         setTimeout(() => {
           setMessage(null);
