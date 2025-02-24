@@ -1,7 +1,35 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
 import loginService from './services/login';
+
+const Togglable = forwardRef((props, refs) => {
+  const [visible, setVisible] = useState(false);
+  const showWhenVisible = {display: visible ? '' : 'none'};
+  const hideWhenVisible = {display: visible ? 'none' : ''};
+
+  const toggleVisibility = () => {
+    setVisible(!visible);
+  }
+
+  useImperativeHandle(refs, () => {   
+    return {  
+      toggleVisibility
+    }  
+  });
+
+  return(
+    <div>
+      <div style={hideWhenVisible}>
+        <button onClick={toggleVisibility}>{props.value}</button>
+      </div>
+      <div style={showWhenVisible}>
+        {props.children}
+      </div>
+      <button style={showWhenVisible} onClick={toggleVisibility}>cancel</button>
+    </div>
+  );
+});
 
 const LoginForm = ({handleLogin, username, setUsername, password, setPassword}) => {
   return(
@@ -56,6 +84,7 @@ const App = () => {
     author: '',
     url: ''
   });
+  const blogFromRef = useRef(null);
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -98,6 +127,7 @@ const App = () => {
       .create(blog)
       .then(res => {
         setBlogs(blogs.concat(res));
+        blogFromRef.current.toggleVisibility();
         setBlog({
           title: '',
           author: '',
@@ -141,7 +171,9 @@ const App = () => {
       }
       <h4>{user.name} logged in</h4>
       <button onClick={handleLogout}>logout</button>
-      <NewBlogForm handleNewBlog={handleNewBlog} blog={blog} setBlog={setBlog}/>
+      <Togglable value={'create new blog'} ref={blogFromRef}>
+        <NewBlogForm handleNewBlog={handleNewBlog} blog={blog} setBlog={setBlog}/>
+      </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
