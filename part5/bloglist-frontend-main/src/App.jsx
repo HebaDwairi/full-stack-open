@@ -50,11 +50,25 @@ const LoginForm = ({handleLogin, username, setUsername, password, setPassword}) 
   );
 }
 
-const NewBlogForm = ({handleNewBlog, blog, setBlog}) => {
+const NewBlogForm = ({handleNewBlog}) => {
+  const [blog, setBlog] = useState({
+    title: '',
+    author: '',
+    url: ''
+  });
+
+  const addBlog = () => {
+    handleNewBlog(blog);
+    setBlog({
+      title: '',
+      author: '',
+      url: ''
+    });
+  }
   return(
     <div>
       <h3>Create New</h3>
-      <form onSubmit={handleNewBlog}>
+      <form onSubmit={addBlog}>
         <div>
           title: 
           <input type="text" value={blog.title} onChange={(e) => setBlog({...blog, title: e.target.value})}/>
@@ -79,12 +93,7 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState(null);
-  const [blog, setBlog] = useState({
-    title: '',
-    author: '',
-    url: ''
-  });
-  const blogFromRef = useRef(null);
+  const blogFormRef = useRef(null);
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -121,13 +130,12 @@ const App = () => {
     setUser(null);
   }
 
-  const handleNewBlog = (e) => {
-    e.preventDefault();
+  const handleNewBlog = () => {
     blogService
       .create(blog)
       .then(res => {
         setBlogs(blogs.concat(res));
-        blogFromRef.current.toggleVisibility();
+        blogFormRef.current.toggleVisibility();
         setBlog({
           title: '',
           author: '',
@@ -171,8 +179,8 @@ const App = () => {
       }
       <h4>{user.name} logged in</h4>
       <button onClick={handleLogout}>logout</button>
-      <Togglable value={'create new blog'} ref={blogFromRef}>
-        <NewBlogForm handleNewBlog={handleNewBlog} blog={blog} setBlog={setBlog}/>
+      <Togglable value={'create new blog'} ref={blogFormRef}>
+        <NewBlogForm handleNewBlog={handleNewBlog}/>
       </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
