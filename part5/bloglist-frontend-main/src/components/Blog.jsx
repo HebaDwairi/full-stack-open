@@ -1,7 +1,31 @@
 import { useState } from 'react';
+import blogService from '../services/blogs';
 
-const Blog = ({ blog }) => {
+const Blog = ({ blogs, setBlogs, index }) => {
   const [visible, setVisible] = useState(false);
+  const blog = blogs[index];
+
+  const obj = {
+    user: blog.user.id,
+    title: blog.title,
+    author: blog.author,
+    url: blog.url,
+    likes: blog.likes + 1,
+  }
+  
+  const likeBlog = () => {
+    blogService
+      .update(obj, blog.id)
+      .then(updatedBlog => {
+        console.log(updatedBlog);
+        const tmp = [...blogs];
+        tmp[index] = updatedBlog;
+        setBlogs(tmp);
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  }
 
   return(
     <div style={styles}>
@@ -11,7 +35,7 @@ const Blog = ({ blog }) => {
       <div>
         <a href={blog.url}>{blog.url}</a>
         <p>likes: {blog.likes}
-          <button>like</button>
+          <button onClick={likeBlog}>like</button>
         </p>
         <p>{blog.user.username}</p>
       </div>}

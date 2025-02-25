@@ -30,6 +30,11 @@ blogsRouter.post('/', async (request, response, next) => {
 
     user.blogs = user.blogs.concat(result._id);
     await user.save();
+    result.user = {
+      id: user.id,
+      name: user.name,
+      username: user.username
+    }
 
     response.status(201).json(result);
   }
