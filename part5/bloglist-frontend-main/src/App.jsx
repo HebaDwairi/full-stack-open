@@ -135,7 +135,7 @@ const App = () => {
     blogService
       .create(blog)
       .then(res => {
-        setBlogs(blogs.concat({...res, user}));
+        setBlogs(blogs.concat(res));
         blogFormRef.current.toggleVisibility();
         setMessage(`a new blog ${res.title} by ${res.author} added`);
         setTimeout(() => {

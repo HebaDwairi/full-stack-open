@@ -17,7 +17,6 @@ const Blog = ({ blogs, setBlogs, index }) => {
     blogService
       .update(obj, blog.id)
       .then(updatedBlog => {
-        console.log(updatedBlog);
         const tmp = [...blogs];
         tmp[index] = updatedBlog;
         setBlogs(tmp);
