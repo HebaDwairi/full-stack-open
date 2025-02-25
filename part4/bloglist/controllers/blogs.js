@@ -65,17 +65,14 @@ blogsRouter.delete('/:id', async (request, response, next) => {
 
 blogsRouter.put('/:id', async (request, response, next) => {
   try {
-    const blog = await Blog.findById(request.params.id);
+    const blog = await Blog.findById(request.params.id).populate('user' ,{name: 1, username: 1});
+    
 
     if(!request.user.id || !request.token) {
       return response.status(401).json({ error: 'invalid token' });
     }
-    if(request.user.id !== blog.user.toString()) {
-      return response.status(401).json({ error: 'invalid user' });
-    }
-
     const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, request.body, {new: true});
-    updatedBlog.user = request.user;
+    updatedBlog.user = blog.user;
     response.json(updatedBlog);
   }
   catch (err) {

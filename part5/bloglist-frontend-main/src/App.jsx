@@ -183,7 +183,7 @@ const App = () => {
         <NewBlogForm handleNewBlog={handleNewBlog}/>
       </Togglable>
       {sortedBlogs.map((blog, index) =>
-        <Blog key={blog.id} blogs={blogs} setBlogs={setBlogs} index={index}/>
+        <Blog key={blog.id} blogs={blogs} setBlogs={setBlogs} index={index} user={user}/>
       )}
     </div>
   );
