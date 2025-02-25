@@ -40,27 +40,23 @@ const Blog = ({ blogs, setBlogs, index , user }) => {
   }
 
   return(
-    <div style={styles}>
-      <span>{blog.title} {blog.author}</span>
-      <button onClick={() => {setVisible(!visible)}}>{visible ? 'hide' : 'view'}</button>
-      {visible &&
+    <div className='container'>
       <div>
-        <a href={blog.url}>{blog.url}</a>
-        <p>likes: {blog.likes}
-          <button onClick={likeBlog}>like</button>
-        </p>
-        <p>{blog.user.username}</p>
-        {user.username === blog.user.username &&
-        <button onClick={removeBlog}>remove</button>}
-      </div>}
+        <b>{blog.title} {blog.author}</b>
+        {visible &&
+        <div>
+          url: <a href={blog.url}>{blog.url}</a>
+          <p>likes: {blog.likes}
+            <button className='btn small' onClick={likeBlog}>like</button>
+          </p>
+          <p>user: {blog.user.username}</p>
+          {user.username === blog.user.username &&
+          <button className='btn small cancel' onClick={removeBlog}>remove</button>}
+        </div>}
+      </div>
+      <button className='btn small' onClick={() => {setVisible(!visible)}}>{visible ? 'hide' : 'view'}</button>
     </div>
   );
-}
-
-const styles = {
-  border: '1px solid black',
-  margin: 3,
-  padding: 3
 }
 
 export default Blog

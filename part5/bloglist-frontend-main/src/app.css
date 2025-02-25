@@ -1,0 +1,54 @@
+html {
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    background-color: rgb(40, 43, 53);
+    color: azure;
+}
+
+.container {
+    padding: .3rem;
+    margin: .3rem;
+    border-radius: 6px;
+    border: 2px solid rgb(85, 87, 101);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.header {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    margin: .3rem;
+}
+
+.name {
+    flex: 2
+}
+
+.btn {
+    background-color: rgb(79, 199, 171);
+    border: 2px solid rgb(170, 225, 219);
+    border-radius: 6px;
+    padding: 5px;
+    color: white;
+    font-size: medium;
+    font-weight: bold;
+    margin: .4rem;
+}
+
+.cancel {
+    background-color: rgb(199, 131, 79);
+    border: 2px solid rgb(230, 214, 200);
+}
+
+.blogs {
+    margin: auto;
+    width: 50%;
+    min-width: 300px;
+}
+
+.small {
+    font-size: small;
+    margin: .2rem;
+    padding: 3px;
+}

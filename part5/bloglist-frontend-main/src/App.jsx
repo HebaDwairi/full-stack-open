@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import './app.css';
 import Blog from './components/Blog';
 import Togglable from './components/Togglable';
 import LoginForm from './components/LoginForm';
@@ -90,20 +91,24 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
-      {message &&
-        <div style={{ border:'1px solid black' }}>
-          {message}
-        </div>
-      }
-      <h4>{user.name} logged in</h4>
-      <button onClick={handleLogout}>logout</button>
-      <Togglable value={'create new blog'} ref={blogFormRef}>
-        <NewBlogForm handleNewBlog={handleNewBlog}/>
-      </Togglable>
-      {sortedBlogs.map((blog, index) =>
-        <Blog key={blog.id} blogs={blogs} setBlogs={setBlogs} index={index} user={user}/>
-      )}
+      <div className='header'>
+        <h2 className='name'>blogs</h2>
+        {message &&
+          <div style={{ border:'1px solid black' }}>
+            {message}
+          </div>
+        }
+        <h4>{user.name} logged in</h4>
+        <button onClick={handleLogout} className='btn'>logout</button>
+      </div>
+      <div className='blogs'>
+        <Togglable value={'create new blog'} ref={blogFormRef}>
+          <NewBlogForm handleNewBlog={handleNewBlog}/>
+        </Togglable>
+        {sortedBlogs.map((blog, index) =>
+          <Blog key={blog.id} blogs={blogs} setBlogs={setBlogs} index={index} user={user}/>
+        )}
+      </div>
     </div>
   );
 }
