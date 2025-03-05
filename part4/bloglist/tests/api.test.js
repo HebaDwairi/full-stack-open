@@ -76,7 +76,7 @@ test('when a post request is made the blog is saved to the db', async () => {
 
     assert.strictEqual(blogsAtStart.length + 1, blogsAtEnd.length);
     assert(blogsAtEnd.find(o => o.title === 'test blog' && o.author === 'authorname' && o.url === 'url' && o.likes === 1));
-    assert.strictEqual(res.body.user.toString(), usersAtStart[0].id);
+    assert.strictEqual(res.body.user.id, usersAtStart[0].id);
 });
 
 test('when likes property is missing it defaults to zero', async () => {

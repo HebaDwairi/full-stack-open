@@ -64,7 +64,7 @@ const initialUsers = [
     _id: "5a422bc61b54a676234d17fc", 
     name: "abc",
     username: "abc",
-    passwordHash: "$2y$10$sjbDkRcUb0FCC/FgYovOve0DZVaOCYWB4A2F4iV4nvePMWLP2ZeF.",
+    passwordHash: "$2y$10$sCbZJOUm940J4rb1sAl05.Wkv5sOy1T2PbgClW7Kz.VN.owi3LOBa",
     __v: 0
   },
   {
