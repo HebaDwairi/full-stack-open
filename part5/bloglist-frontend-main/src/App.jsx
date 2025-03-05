@@ -74,6 +74,38 @@ const App = () => {
       });
   }
 
+  const likeBlog = (blog) => {
+    const obj = {
+      ...blog,
+      user: blog.user.id,
+      likes: blog.likes + 1,
+    }
+
+    blogService
+      .update(obj, blog.id)
+      .then(updatedBlog => {
+        setBlogs((prev) => (prev.map(b => b.id === blog.id ? updatedBlog : b))
+        );
+      })
+      .catch(err => {
+        console.log(err.message);
+        console.log(obj, blog)
+      });
+  }
+
+  const removeBlog = (blog) => {
+    if(confirm(`do you want to delete blog ${blog.title} by ${blog.author}`)) {
+      blogService
+        .deleteBlog(blog.id)
+        .then(res => {
+          setBlogs(blogs.filter(b => b.id !== blog.id));
+        })
+        .catch(err => {
+          console.log(err.message);
+        });
+    }
+  }
+
   if(user === null) {
     return (
       <div>
@@ -105,8 +137,8 @@ const App = () => {
         <Togglable value={'create new blog'} ref={blogFormRef}>
           <NewBlogForm handleNewBlog={handleNewBlog}/>
         </Togglable>
-        {sortedBlogs.map((blog, index) =>
-          <Blog key={blog.id} blogs={blogs} setBlogs={setBlogs} index={index} user={user}/>
+        {sortedBlogs.map((blog) =>
+          <Blog key={blog.id} blog={blog} likeBlog={likeBlog} removeBlog={removeBlog} user={user}/>
         )}
       </div>
     </div>
