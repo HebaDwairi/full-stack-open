@@ -35,4 +35,22 @@ describe('Blog app', () => {
       await expect(page.getByText('login failed: invalid username or password')).toBeVisible();
     });
   });
+
+  describe('when logged in', () => {
+    beforeEach(async ({ page }) => {
+      await page.getByTestId('username').fill('heba');
+      await page.getByTestId('password').fill('1011');
+      await page.getByRole('button', {name: 'login'}).click();
+    });
+
+    test('a new blog can be added', async({ page }) => {
+      await page.getByRole('button', {name: 'create new blog'}).click();
+      await page.getByTestId('title').fill('Canonical string reduction');
+      await page.getByTestId('author').fill('Edsger W. Dijkstra');
+      await page.getByTestId('url').fill('http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html');
+      await page.getByTestId('createBlog').click();
+
+      await expect(page.getByText('Canonical string reduction Edsger W. Dijkstra')).toBeVisible();
+    });
+  });
 })
