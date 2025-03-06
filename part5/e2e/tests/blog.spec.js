@@ -43,27 +43,34 @@ describe('Blog app', () => {
       await page.getByRole('button', {name: 'login'}).click();
     });
 
-    test('a new blog can be added', async({ page }) => {
-      await page.getByRole('button', {name: 'create new blog'}).click();
-      await page.getByTestId('title').fill('Canonical string reduction');
-      await page.getByTestId('author').fill('Edsger W. Dijkstra');
-      await page.getByTestId('url').fill('http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html');
-      await page.getByTestId('createBlog').click();
+    describe('after a new blog is submitted', () => {
+      beforeEach(async({ page }) => {
+        await page.getByRole('button', {name: 'create new blog'}).click();
+        await page.getByTestId('title').fill('Canonical string reduction');
+        await page.getByTestId('author').fill('Edsger W. Dijkstra');
+        await page.getByTestId('url').fill('http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html');
+        await page.getByTestId('createBlog').click();
+      });
 
-      await expect(page.getByText('Canonical string reduction Edsger W. Dijkstra')).toBeVisible();
-    });
+      test('a new blog can be added', async({ page }) => {
+        await expect(page.getByText('Canonical string reduction Edsger W. Dijkstra')).toBeVisible();
+      });
+  
+      test('a blog can be liked', async ({ page }) => {
+        await page.getByRole('button', {name: 'view'}).click();
+        await page.getByRole('button', {name: 'like'}).click();
+        
+        await expect(page.getByText('likes: 1')).toBeVisible();
+      });
+  
+      test('a blog can be deleted by the user who added it', async ({ page }) => {
+        await page.getByRole('button', {name: 'view'}).click();
+        
+        page.on('dialog', dialog => dialog.accept());
+        await page.getByRole('button', {name: 'remove'}).click();
 
-    test('a blog can be liked', async ({ page }) => {
-      await page.getByRole('button', {name: 'create new blog'}).click();
-      await page.getByTestId('title').fill('Canonical string reduction');
-      await page.getByTestId('author').fill('Edsger W. Dijkstra');
-      await page.getByTestId('url').fill('http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html');
-      await page.getByTestId('createBlog').click();
-
-      await page.getByRole('button', {name: 'view'}).click();
-      await page.getByRole('button', {name: 'like'}).click();
-      
-      await expect(page.getByText('likes: 1')).toBeVisible();
+        await expect(page.getByText('Canonical string reduction Edsger W. Dijkstra')).not.toBeVisible();
+      });
     });
   });
-})
+});
