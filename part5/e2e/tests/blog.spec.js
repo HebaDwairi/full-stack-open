@@ -9,8 +9,14 @@ describe('Blog app', () => {
         username: 'heba',
         password: '1011'
       }
-    })
-
+    });
+    await request.post('http://localhost:3001/api/users', {
+      data: {
+        name: 'zarzoor',
+        username: 'zarzoor',
+        password: '0011'
+      }
+    });
     await page.goto('http://localhost:5173');
   });
 
@@ -70,6 +76,19 @@ describe('Blog app', () => {
         await page.getByRole('button', {name: 'remove'}).click();
 
         await expect(page.getByText('Canonical string reduction Edsger W. Dijkstra')).not.toBeVisible();
+      });
+
+      test('the remove button only appears to the user who created the blog', async ({ page }) => {
+        await page.getByRole('button', {name: 'view'}).click();
+        await expect(await page.getByRole('button', {name: 'remove'})).toBeVisible();
+ 
+        await page.getByRole('button', {name: 'logout'}).click();
+        await page.getByTestId('username').fill('zarzoor');
+        await page.getByTestId('password').fill('0011');
+        await page.getByRole('button', {name: 'login'}).click();
+
+        await page.getByRole('button', {name: 'view'}).click();
+        await expect(await page.getByRole('button', {name: 'remove'})).not.toBeVisible();
       });
     });
   });
