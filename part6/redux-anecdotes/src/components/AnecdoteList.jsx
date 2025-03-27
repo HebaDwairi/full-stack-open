@@ -7,11 +7,10 @@ const AnecdotesList = () => {
   const anecdotes = useSelector(({anecdotes, filter}) => 
     anecdotes.filter(elem => elem.content.toLowerCase().includes(filter.toLowerCase()))
   );
-  const sortedAnecdotes = anecdotes.sort((a, b) => b.votes - a.votes);
 
   return (
     <>
-      {sortedAnecdotes.map(anecdote =>
+      {anecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
